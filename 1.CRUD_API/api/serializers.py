@@ -17,3 +17,17 @@ class StudentSerializer(serializers.Serializer):
         instance.city = validated_data.get('city', instance.city)
         instance.save()
         return instance
+
+    # Field level validation
+    def validate_roll(self,value):
+        if value  >= 100 or value < 0:
+            raise serializers.ValidationError("Roll should be between 0 and 100")
+        return value
+
+    def validate(self,attrs):
+        name = attrs.get('name')
+        city = attrs.get('city')
+
+        if name.lower() == 'Oranges' and city.lower() != 'Nagpur':
+            raise serializers.ValidationError("Oranges should be in Nagpur city")
+        return attrs
